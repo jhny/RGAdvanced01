@@ -1,48 +1,37 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
 
-<p>
-  <strong>Name:</strong>
-  <%= @post.name %>
-</p>
+  <h1><%= @post.title %></h1>
+  <h6>by <%= "#{@post.name} (#{@post.email}) on #{short_datetime_format(@post.created_at)}" %></h6>
 
-<p>
-  <strong>Email:</strong>
-  <%= @post.email %>
-</p>
+  <% if notice.present? %>
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      <%= notice %>
+    </div>
+  <% end %>
 
-<p>
-  <strong>Title:</strong>
-  <%= @post.title %>
-</p>
+  <%= markdown(@post.text) %>
 
-<p>
-  <strong>Text:</strong>
-  <%= markdown(@post.text)  %>
-</p>
-
-<hr/>
-
-<% @post.comments.each do |comment| %>
-
-  <p>
-    <strong>Name:</strong>
-    <%= comment.name %>
-  </p>
-
-  <p>
-    <strong>Email:</strong>
-    <%= comment.email %>
-  </p>
-
-  <p>
-    <strong>Text:</strong>
-    <%= comment.text %>
-  </p>
-  <%= link_to 'Delete comment', [@post, comment], method: :delete, data: { confirm: 'Are you sure?' } %>
   <hr/>
-<% end %>
+
+  <% if @post.comments.present? %>
+    <h2>Comments</h2>
+
+    <% @post.comments.each do |comment| %>
+      <blockquote>
+        <%= comment.text %>
+      </blockquote>
+      <h6>by <%= "#{comment.name} (#{comment.email}) on #{short_datetime_format(comment.created_at)}" %></h6>
+
+      <%= link_to 'Delete comment', [@post, comment], method: :delete, data: {confirm: 'Are you sure?'}, :class => 'btn btn-default' %>
+      <hr/>
+    <% end %>
+
+  <% end %>
 
 
-<%= link_to 'Add comment', new_post_comment_path(@post) %>
-<%= link_to 'Edit', edit_post_path(@post) %> |
-<%= link_to 'Back', posts_path %>
+  <%= link_to 'Add comment', new_post_comment_path(@post), :class => 'btn btn-default' %>
+  <%= link_to 'Edit', edit_post_path(@post), :class => 'btn btn-default' %>
+  <%= link_to 'Back', posts_path, :class => 'btn btn-default' %>
+</div>

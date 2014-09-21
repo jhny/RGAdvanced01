@@ -7,6 +7,7 @@ class CreateComments < ActiveRecord::Migration
       t.string :email
       t.string :text
 
+      t.timestamps
     end
   end
 end
